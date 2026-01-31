@@ -1,0 +1,2 @@
+export { Scoreboard } from './Scoreboard'
+

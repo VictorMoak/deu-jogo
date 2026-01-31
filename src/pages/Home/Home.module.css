@@ -1,0 +1,476 @@
+.home {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  text-align: center;
+  padding: var(--spacing-xxl) var(--spacing-md);
+  background: linear-gradient(180deg, rgba(28, 44, 91, 0.5) 0%, transparent 100%);
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
+  position: relative;
+}
+
+.headerSpacer {
+  width: 40px;
+  flex-shrink: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex: 1;
+}
+
+.logoIcon {
+  font-size: 3rem;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.logo h1 {
+  font-size: 3rem;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+.tagline {
+  color: var(--gray-light);
+  font-size: 1.125rem;
+  margin: 0;
+}
+
+.main {
+  flex: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  width: 100%;
+}
+
+.newGame {
+  margin-bottom: var(--spacing-xxl);
+}
+
+.newGame h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  color: var(--gold);
+}
+
+.createButtonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.history h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  color: var(--white);
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl);
+}
+
+.error {
+  text-align: center;
+  padding: var(--spacing-lg);
+  color: var(--danger);
+}
+
+/* Tabs */
+.tabsRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.tabs {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.tab {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--gray-light);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tab:hover {
+  border-color: var(--gold);
+  color: var(--white);
+}
+
+.tabActive {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.gameDayList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.showMoreBtn {
+  width: 100%;
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--gray-light);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.showMoreBtn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.gameDayCard {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  transition: all var(--transition-normal);
+}
+
+.gameDayCard:hover {
+  transform: translateX(5px);
+  border-color: var(--gold);
+}
+
+.gameDayContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  cursor: pointer;
+}
+
+.gameDayHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.gameDayTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+.gameDayTitle {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--white);
+  flex: 1;
+  min-width: 0;
+}
+
+.gameDayActionsMobile {
+  display: none;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-shrink: 0;
+}
+
+.gameDayDetails {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  color: var(--gray-light);
+  font-size: 0.875rem;
+}
+
+.gameDayDetailsContent {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex: 1;
+}
+
+.date {
+  text-transform: capitalize;
+}
+
+.time {
+  color: var(--gray);
+}
+
+.gameDayActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-shrink: 0;
+}
+
+.editBtn,
+.deleteBtn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--gray-light);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all var(--transition-fast);
+}
+
+.editBtn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.deleteBtn:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: rgba(220, 53, 69, 0.1);
+}
+
+.footer {
+  text-align: center;
+  padding: var(--spacing-lg);
+  color: var(--gray);
+  font-size: 0.875rem;
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn var(--transition-fast) ease-out;
+}
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  max-width: 500px;
+  width: 90%;
+  text-align: left;
+  animation: modalSlideIn var(--transition-normal) ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal h3 {
+  margin: 0 0 var(--spacing-md);
+  color: var(--gold);
+  font-size: 1.25rem;
+}
+
+.modalText {
+  font-size: 1.125rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.modalSubtext {
+  color: var(--gray-light);
+  font-size: 0.875rem;
+  margin-bottom: var(--spacing-lg);
+}
+
+.modalActions {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+  margin-top: var(--spacing-md);
+}
+
+.modalActions .btn {
+  flex: 1;
+  max-width: 150px;
+}
+
+.modalDeleteBtn {
+  background: #ef4444 !important;
+  background-color: #ef4444 !important;
+  background-image: none !important;
+  border: 1px solid #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: var(--white) !important;
+  box-shadow: var(--shadow-md) !important;
+  font-weight: 600 !important;
+}
+
+.modalDeleteBtn:hover {
+  background: #dc2626 !important;
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: var(--white) !important;
+  box-shadow: var(--shadow-gold) !important;
+  transform: translateY(-2px) !important;
+}
+
+.modalDeleteBtn:active {
+  background: #ef4444 !important;
+  background-color: #ef4444 !important;
+  transform: translateY(0) !important;
+}
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.formGroup label {
+  color: var(--gray-light);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.formGroup input[type="text"],
+.formGroup input[type="date"],
+.formGroup input[type="time"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.formGroup select {
+  width: 100%;
+  box-sizing: border-box;
+  /* Usa os estilos globais, apenas garante width 100% */
+}
+
+@media (min-width: 601px) {
+  .modal {
+    max-width: 600px;
+    width: 100%;
+  }
+
+  .editForm {
+    width: 100%;
+    flex: 1;
+  }
+
+  .formGroup {
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  .formGroup input,
+  .formGroup select {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Sobrescrever max-width da classe .input dentro do formGroup */
+  .formGroup .input {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .input {
+    max-width: 100%;
+  }
+  
+  .gameDayCard {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gameDayActions {
+    display: none;
+  }
+
+  .gameDayActionsMobile {
+    display: flex;
+  }
+
+  .gameDayHeader {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .gameDayTitleRow {
+    width: 100%;
+  }
+
+  .gameDayDetails {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .gameDayDetailsContent {
+    flex: 1;
+  }
+}
+

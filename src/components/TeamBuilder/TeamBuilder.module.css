@@ -1,0 +1,343 @@
+.container {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.header h2 {
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.availablePlayers {
+  transition: all var(--transition-fast);
+}
+
+.availablePlayers h3 {
+  margin-bottom: var(--spacing-md);
+  font-size: 1rem;
+  color: var(--gold);
+}
+
+.playerList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  min-height: 50px;
+}
+
+.playerChip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: grab;
+  transition: all var(--transition-fast);
+}
+
+.playerChip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--gold);
+}
+
+.playerChip:active {
+  cursor: grabbing;
+}
+
+.teamsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.teamCard {
+  min-height: 200px;
+  transition: all var(--transition-fast);
+}
+
+.teamCard.dragOver,
+.availablePlayers.dragOver {
+  border-color: var(--gold);
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.teamHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.teamName {
+  margin: 0;
+  font-size: 1.125rem;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.teamName:hover {
+  color: var(--gold);
+}
+
+.teamNameInput {
+  font-size: 1.125rem;
+  font-weight: 700;
+  padding: var(--spacing-xs);
+  width: 150px;
+}
+
+.teamActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.playerCount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--gold);
+  color: var(--primary-dark);
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.teamPlayers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  min-height: 100px;
+}
+
+.dropHint {
+  color: var(--gray);
+  font-size: 0.875rem;
+  text-align: center;
+  padding: var(--spacing-lg);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.teamPlayer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: grab;
+  transition: all var(--transition-fast);
+}
+
+.teamPlayer:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.teamPlayer.captain {
+  border-color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.playerNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 28px;
+  padding: 0 var(--spacing-xs);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--gray-light);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.playerNumber:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.numberInput {
+  width: 48px;
+  height: 28px;
+  padding: 0 var(--spacing-xs);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-align: center;
+  background: var(--bg-input);
+  border: 1px solid var(--gold);
+  border-radius: var(--radius-sm);
+  color: var(--white);
+}
+
+.numberInput::-webkit-inner-spin-button,
+.numberInput::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.numberInput[type=number] {
+  -moz-appearance: textfield;
+}
+
+.playerInfo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.playerNameContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.playerNameRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.playerPositionRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-top: 2px;
+}
+
+.positionBadge {
+  font-size: 0.625rem;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.positionPrimary {
+  background: rgba(212, 175, 55, 0.2);
+  color: var(--gold);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.positionSecondary {
+  background: rgba(108, 117, 125, 0.2);
+  color: var(--gray-light);
+  border-color: rgba(108, 117, 125, 0.4);
+}
+
+.captainBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: var(--gold);
+  color: var(--primary-dark);
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.playerActions {
+  display: flex;
+  gap: var(--spacing-xs);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.teamPlayer:hover .playerActions {
+  opacity: 1;
+}
+
+.captainBtn,
+.removeBtn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--gray);
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all var(--transition-fast);
+}
+
+.captainBtn:hover:not(:disabled) {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.captainBtn.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--primary-dark);
+  cursor: default;
+}
+
+.captainBtn:disabled {
+  cursor: default;
+}
+
+.removeBtn:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .teamsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .playerActions {
+    opacity: 1;
+  }
+
+  .captainBadge {
+    display: none;
+  }
+}
+
