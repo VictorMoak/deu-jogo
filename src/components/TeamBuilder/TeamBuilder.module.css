@@ -80,7 +80,13 @@
 .teamCard.dragOver,
 .availablePlayers.dragOver {
   border-color: var(--gold);
-  background: rgba(212, 175, 55, 0.05);
+  background: rgba(212, 175, 55, 0.1);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.3);
+}
+
+.teamCard.dragOver .playerActions,
+.teamCard.dragOver button {
+  pointer-events: none;
 }
 
 .teamHeader {
@@ -141,6 +147,8 @@
   min-height: 100px;
   position: relative;
   z-index: 1;
+  padding: var(--spacing-xs);
+  margin: calc(-1 * var(--spacing-xs));
 }
 
 .dropHint {
@@ -165,6 +173,7 @@
   transition: all var(--transition-fast);
   position: relative;
   z-index: 2;
+  pointer-events: auto;
 }
 
 .teamPlayer:hover {
@@ -308,6 +317,9 @@
   font-size: 0.75rem;
   transition: all var(--transition-fast);
   flex-shrink: 0;
+  pointer-events: auto;
+  position: relative;
+  z-index: 10;
 }
 
 .captainBtn:hover:not(:disabled) {
@@ -367,6 +379,11 @@
 
   .teamPlayer button {
     pointer-events: auto;
+  }
+
+  .teamCard.dragOver .teamPlayers {
+    background: rgba(212, 175, 55, 0.05);
+    border-radius: var(--radius-md);
   }
 }
 

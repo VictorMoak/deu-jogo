@@ -133,7 +133,7 @@ export function Home({ onSelectGameDay, onToggleSidebar }) {
           <MenuButton onClick={onToggleSidebar} />
           <div className={styles.logo}>
             <span className={styles.logoIcon}>⚽</span>
-            <h1>Deu Ruim!!!!!</h1>
+            <h1>Deu Jogo</h1>
           </div>
           <div className={styles.headerSpacer}></div>
         </div>

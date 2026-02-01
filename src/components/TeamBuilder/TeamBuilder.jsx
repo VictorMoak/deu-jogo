@@ -57,6 +57,7 @@ export function TeamBuilder({
   }
 
   const handleDragStart = (e, player, fromTeamId = null) => {
+    e.dataTransfer.effectAllowed = 'move'
     e.dataTransfer.setData('playerId', player.player_id || player.id)
     e.dataTransfer.setData('fromTeamId', fromTeamId || '')
     e.dataTransfer.setData('teamPlayerId', player.id || '')
@@ -64,30 +65,31 @@ export function TeamBuilder({
 
   const handleDragOver = (e) => {
     e.preventDefault()
-    e.stopPropagation()
+    e.dataTransfer.dropEffect = 'move'
     e.currentTarget.classList.add(styles.dragOver)
   }
 
   const handleDragLeave = (e) => {
-    // Only remove dragOver if we're actually leaving the drop zone
-    // (not just moving to a child element)
+    // Check if we're actually leaving the drop zone
     const rect = e.currentTarget.getBoundingClientRect()
     const x = e.clientX
     const y = e.clientY
     
-    if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+    // Only remove if mouse is truly outside the element
+    if (x <= rect.left || x >= rect.right || y <= rect.top || y >= rect.bottom) {
       e.currentTarget.classList.remove(styles.dragOver)
     }
   }
 
   const handleDrop = async (e, teamId) => {
     e.preventDefault()
-    e.stopPropagation()
     e.currentTarget.classList.remove(styles.dragOver)
 
     const playerId = e.dataTransfer.getData('playerId')
     const fromTeamId = e.dataTransfer.getData('fromTeamId')
     const teamPlayerId = e.dataTransfer.getData('teamPlayerId')
+
+    if (!playerId) return
 
     if (fromTeamId === teamId) return
 
@@ -102,7 +104,6 @@ export function TeamBuilder({
 
   const handleDropToAvailable = async (e) => {
     e.preventDefault()
-    e.stopPropagation()
     e.currentTarget.classList.remove(styles.dragOver)
 
     const teamPlayerId = e.dataTransfer.getData('teamPlayerId')
@@ -197,9 +198,32 @@ export function TeamBuilder({
             <div
               key={team.id}
               className={`${styles.teamCard} card`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, team.id)}
+              onDragOver={(e) => {
+                e.preventDefault()
+                e.dataTransfer.dropEffect = 'move'
+                e.currentTarget.classList.add(styles.dragOver)
+              }}
+              onDragLeave={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect()
+                const x = e.clientX
+                const y = e.clientY
+                if (x <= rect.left || x >= rect.right || y <= rect.top || y >= rect.bottom) {
+                  e.currentTarget.classList.remove(styles.dragOver)
+                }
+              }}
+              onDrop={(e) => {
+                e.preventDefault()
+                e.currentTarget.classList.remove(styles.dragOver)
+                const playerId = e.dataTransfer.getData('playerId')
+                const fromTeamId = e.dataTransfer.getData('fromTeamId')
+                const teamPlayerId = e.dataTransfer.getData('teamPlayerId')
+                if (!playerId) return
+                if (fromTeamId === team.id) return
+                if (fromTeamId && teamPlayerId) {
+                  removePlayerFromTeam(teamPlayerId)
+                }
+                addPlayerToTeam(team.id, playerId)
+              }}
             >
               <div className={styles.teamHeader}>
                 {editingTeam === team.id ? (
@@ -239,9 +263,6 @@ export function TeamBuilder({
 
               <div 
                 className={styles.teamPlayers}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, team.id)}
               >
                 {(!team.team_players || team.team_players.length === 0) ? (
                   <p className={styles.dropHint}>Arraste jogadores aqui</p>
