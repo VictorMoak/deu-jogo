@@ -75,6 +75,8 @@
   min-height: 200px;
   transition: all var(--transition-fast);
   position: relative;
+  /* Garantir que toda a área do card seja clicável/detectável */
+  overflow: visible;
 }
 
 .teamCard.dragOver,
@@ -170,21 +172,6 @@
 }
 
 /* Quando está arrastando, desabilitar pointer-events nos elementos filhos para permitir drop */
-.teamCard.dragOver .teamHeader {
-  pointer-events: none;
-}
-
-.teamCard.dragOver .teamHeader * {
-  pointer-events: none;
-}
-
-.teamCard.dragOver .teamPlayer {
-  pointer-events: none;
-}
-
-.teamCard.dragOver .teamPlayer * {
-  pointer-events: none;
-}
 
 .teamPlayer:hover {
   background: rgba(255, 255, 255, 0.06);

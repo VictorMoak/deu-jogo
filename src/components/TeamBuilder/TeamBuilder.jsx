@@ -17,6 +17,7 @@ export function TeamBuilder({
   const [teamName, setTeamName] = useState('')
   const [editingNumber, setEditingNumber] = useState(null)
   const [playerNumber, setPlayerNumber] = useState('')
+  const [draggedPlayer, setDraggedPlayer] = useState(null)
 
   // Sort team players: captain first, then by name
   const sortTeamPlayers = (players) => {
@@ -56,60 +57,76 @@ export function TeamBuilder({
     setTeamName('')
   }
 
+  // Drag and Drop handlers - SIMPLES como PlayersManagement
   const handleDragStart = (e, player, fromTeamId = null) => {
-    e.dataTransfer.effectAllowed = 'move'
-    e.dataTransfer.setData('playerId', player.player_id || player.id)
-    e.dataTransfer.setData('fromTeamId', fromTeamId || '')
-    e.dataTransfer.setData('teamPlayerId', player.id || '')
+    // Armazenar objeto com todas as informações necessárias
+    const dragData = {
+      player: player,
+      playerId: player.player_id || player.id,
+      fromTeamId: fromTeamId || null,
+      teamPlayerId: player.id || null
+    }
+    setDraggedPlayer(dragData)
+
+    if (e.dataTransfer) {
+      e.dataTransfer.effectAllowed = 'move'
+    }
   }
 
   const handleDragOver = (e) => {
     e.preventDefault()
-    e.dataTransfer.dropEffect = 'move'
+    if (e.dataTransfer) {
+      e.dataTransfer.dropEffect = 'move'
+    }
     e.currentTarget.classList.add(styles.dragOver)
   }
 
   const handleDragLeave = (e) => {
-    // Check if we're actually leaving the drop zone
-    const rect = e.currentTarget.getBoundingClientRect()
-    const x = e.clientX
-    const y = e.clientY
-    
-    // Only remove if mouse is truly outside the element
-    if (x <= rect.left || x >= rect.right || y <= rect.top || y >= rect.bottom) {
-      e.currentTarget.classList.remove(styles.dragOver)
-    }
+    e.currentTarget.classList.remove(styles.dragOver)
   }
 
   const handleDrop = async (e, teamId) => {
     e.preventDefault()
     e.currentTarget.classList.remove(styles.dragOver)
 
-    const playerId = e.dataTransfer.getData('playerId')
-    const fromTeamId = e.dataTransfer.getData('fromTeamId')
-    const teamPlayerId = e.dataTransfer.getData('teamPlayerId')
+    if (!draggedPlayer) return
+
+    const playerId = draggedPlayer.playerId
+    const fromTeamId = draggedPlayer.fromTeamId
+    const teamPlayerId = draggedPlayer.teamPlayerId
 
     if (!playerId) return
 
-    if (fromTeamId === teamId) return
+    // Se for o mesmo time, não fazer nada
+    if (fromTeamId === teamId) {
+      setDraggedPlayer(null)
+      return
+    }
 
-    // Remove from previous team if exists
+    // Remover do time anterior se existir
     if (fromTeamId && teamPlayerId) {
       await removePlayerFromTeam(teamPlayerId)
     }
 
-    // Add to new team
+    // Adicionar ao novo time
     await addPlayerToTeam(teamId, playerId)
+
+    setDraggedPlayer(null)
   }
 
   const handleDropToAvailable = async (e) => {
     e.preventDefault()
     e.currentTarget.classList.remove(styles.dragOver)
 
-    const teamPlayerId = e.dataTransfer.getData('teamPlayerId')
+    if (!draggedPlayer) return
+
+    const teamPlayerId = draggedPlayer.teamPlayerId
+
     if (teamPlayerId) {
       await removePlayerFromTeam(teamPlayerId)
     }
+
+    setDraggedPlayer(null)
   }
 
   const toggleCaptain = async (teamPlayer) => {
@@ -125,6 +142,7 @@ export function TeamBuilder({
     setEditingNumber(null)
     setPlayerNumber('')
   }
+
 
   return (
     <div className={styles.container}>
@@ -198,36 +216,10 @@ export function TeamBuilder({
             <div
               key={team.id}
               className={`${styles.teamCard} card`}
-              onDragOver={(e) => {
-                e.preventDefault()
-                e.dataTransfer.dropEffect = 'move'
-                e.currentTarget.classList.add(styles.dragOver)
-              }}
-              onDragLeave={(e) => {
-                // Verificar se realmente saiu do elemento (não apenas de um filho)
-                const rect = e.currentTarget.getBoundingClientRect()
-                const x = e.clientX
-                const y = e.clientY
-                // Adicionar uma margem de tolerância para evitar remoção prematura
-                const tolerance = 5
-                if (x < rect.left - tolerance || x > rect.right + tolerance || 
-                    y < rect.top - tolerance || y > rect.bottom + tolerance) {
-                  e.currentTarget.classList.remove(styles.dragOver)
-                }
-              }}
-              onDrop={(e) => {
-                e.preventDefault()
-                e.currentTarget.classList.remove(styles.dragOver)
-                const playerId = e.dataTransfer.getData('playerId')
-                const fromTeamId = e.dataTransfer.getData('fromTeamId')
-                const teamPlayerId = e.dataTransfer.getData('teamPlayerId')
-                if (!playerId) return
-                if (fromTeamId === team.id) return
-                if (fromTeamId && teamPlayerId) {
-                  removePlayerFromTeam(teamPlayerId)
-                }
-                addPlayerToTeam(team.id, playerId)
-              }}
+              data-team-id={team.id}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, team.id)}
             >
               <div className={styles.teamHeader}>
                 {editingTeam === team.id ? (
@@ -265,47 +257,7 @@ export function TeamBuilder({
                 </div>
               </div>
 
-              <div 
-                className={styles.teamPlayers}
-                onDragOver={(e) => {
-                  // Permitir que o evento seja propagado para o teamCard
-                  e.preventDefault()
-                  e.dataTransfer.dropEffect = 'move'
-                  const teamCard = e.currentTarget.closest(`.${styles.teamCard}`)
-                  if (teamCard) {
-                    teamCard.classList.add(styles.dragOver)
-                  }
-                }}
-                onDragLeave={(e) => {
-                  // Só remover se realmente saiu da área
-                  const rect = e.currentTarget.getBoundingClientRect()
-                  const x = e.clientX
-                  const y = e.clientY
-                  if (x <= rect.left || x >= rect.right || y <= rect.top || y >= rect.bottom) {
-                    const teamCard = e.currentTarget.closest(`.${styles.teamCard}`)
-                    if (teamCard) {
-                      teamCard.classList.remove(styles.dragOver)
-                    }
-                  }
-                }}
-                onDrop={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation() // Prevenir que o evento vá para o teamCard também
-                  const teamCard = e.currentTarget.closest(`.${styles.teamCard}`)
-                  if (teamCard) {
-                    teamCard.classList.remove(styles.dragOver)
-                  }
-                  const playerId = e.dataTransfer.getData('playerId')
-                  const fromTeamId = e.dataTransfer.getData('fromTeamId')
-                  const teamPlayerId = e.dataTransfer.getData('teamPlayerId')
-                  if (!playerId) return
-                  if (fromTeamId === team.id) return
-                  if (fromTeamId && teamPlayerId) {
-                    removePlayerFromTeam(teamPlayerId)
-                  }
-                  addPlayerToTeam(team.id, playerId)
-                }}
-              >
+              <div className={styles.teamPlayers}>
                 {(!team.team_players || team.team_players.length === 0) ? (
                   <p className={styles.dropHint}>Arraste jogadores aqui</p>
                 ) : (
