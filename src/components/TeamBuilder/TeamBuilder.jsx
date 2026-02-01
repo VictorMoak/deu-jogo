@@ -204,10 +204,14 @@ export function TeamBuilder({
                 e.currentTarget.classList.add(styles.dragOver)
               }}
               onDragLeave={(e) => {
+                // Verificar se realmente saiu do elemento (não apenas de um filho)
                 const rect = e.currentTarget.getBoundingClientRect()
                 const x = e.clientX
                 const y = e.clientY
-                if (x <= rect.left || x >= rect.right || y <= rect.top || y >= rect.bottom) {
+                // Adicionar uma margem de tolerância para evitar remoção prematura
+                const tolerance = 5
+                if (x < rect.left - tolerance || x > rect.right + tolerance || 
+                    y < rect.top - tolerance || y > rect.bottom + tolerance) {
                   e.currentTarget.classList.remove(styles.dragOver)
                 }
               }}
@@ -263,6 +267,44 @@ export function TeamBuilder({
 
               <div 
                 className={styles.teamPlayers}
+                onDragOver={(e) => {
+                  // Permitir que o evento seja propagado para o teamCard
+                  e.preventDefault()
+                  e.dataTransfer.dropEffect = 'move'
+                  const teamCard = e.currentTarget.closest(`.${styles.teamCard}`)
+                  if (teamCard) {
+                    teamCard.classList.add(styles.dragOver)
+                  }
+                }}
+                onDragLeave={(e) => {
+                  // Só remover se realmente saiu da área
+                  const rect = e.currentTarget.getBoundingClientRect()
+                  const x = e.clientX
+                  const y = e.clientY
+                  if (x <= rect.left || x >= rect.right || y <= rect.top || y >= rect.bottom) {
+                    const teamCard = e.currentTarget.closest(`.${styles.teamCard}`)
+                    if (teamCard) {
+                      teamCard.classList.remove(styles.dragOver)
+                    }
+                  }
+                }}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation() // Prevenir que o evento vá para o teamCard também
+                  const teamCard = e.currentTarget.closest(`.${styles.teamCard}`)
+                  if (teamCard) {
+                    teamCard.classList.remove(styles.dragOver)
+                  }
+                  const playerId = e.dataTransfer.getData('playerId')
+                  const fromTeamId = e.dataTransfer.getData('fromTeamId')
+                  const teamPlayerId = e.dataTransfer.getData('teamPlayerId')
+                  if (!playerId) return
+                  if (fromTeamId === team.id) return
+                  if (fromTeamId && teamPlayerId) {
+                    removePlayerFromTeam(teamPlayerId)
+                  }
+                  addPlayerToTeam(team.id, playerId)
+                }}
               >
                 {(!team.team_players || team.team_players.length === 0) ? (
                   <p className={styles.dropHint}>Arraste jogadores aqui</p>
