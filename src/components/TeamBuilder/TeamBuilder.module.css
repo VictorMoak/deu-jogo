@@ -74,6 +74,7 @@
 .teamCard {
   min-height: 200px;
   transition: all var(--transition-fast);
+  position: relative;
 }
 
 .teamCard.dragOver,
@@ -89,6 +90,11 @@
   margin-bottom: var(--spacing-md);
   padding-bottom: var(--spacing-sm);
   border-bottom: 1px solid var(--border-color);
+  pointer-events: none;
+}
+
+.teamHeader * {
+  pointer-events: auto;
 }
 
 .teamName {
@@ -133,6 +139,8 @@
   flex-direction: column;
   gap: var(--spacing-xs);
   min-height: 100px;
+  position: relative;
+  z-index: 1;
 }
 
 .dropHint {
@@ -142,6 +150,7 @@
   padding: var(--spacing-lg);
   border: 2px dashed var(--border-color);
   border-radius: var(--radius-md);
+  pointer-events: none;
 }
 
 .teamPlayer {
@@ -154,6 +163,8 @@
   border-radius: var(--radius-sm);
   cursor: grab;
   transition: all var(--transition-fast);
+  position: relative;
+  z-index: 2;
 }
 
 .teamPlayer:hover {
@@ -275,6 +286,7 @@
   gap: var(--spacing-xs);
   opacity: 0;
   transition: opacity var(--transition-fast);
+  pointer-events: auto;
 }
 
 .teamPlayer:hover .playerActions {
@@ -295,6 +307,7 @@
   cursor: pointer;
   font-size: 0.75rem;
   transition: all var(--transition-fast);
+  flex-shrink: 0;
 }
 
 .captainBtn:hover:not(:disabled) {
@@ -338,6 +351,22 @@
 
   .captainBadge {
     display: none;
+  }
+
+  .teamCard {
+    min-height: 250px;
+  }
+
+  .teamPlayers {
+    min-height: 150px;
+  }
+
+  .teamPlayer {
+    pointer-events: auto;
+  }
+
+  .teamPlayer button {
+    pointer-events: auto;
   }
 }
 

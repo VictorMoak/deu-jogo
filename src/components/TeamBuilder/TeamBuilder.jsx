@@ -64,15 +64,25 @@ export function TeamBuilder({
 
   const handleDragOver = (e) => {
     e.preventDefault()
+    e.stopPropagation()
     e.currentTarget.classList.add(styles.dragOver)
   }
 
   const handleDragLeave = (e) => {
-    e.currentTarget.classList.remove(styles.dragOver)
+    // Only remove dragOver if we're actually leaving the drop zone
+    // (not just moving to a child element)
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX
+    const y = e.clientY
+    
+    if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+      e.currentTarget.classList.remove(styles.dragOver)
+    }
   }
 
   const handleDrop = async (e, teamId) => {
     e.preventDefault()
+    e.stopPropagation()
     e.currentTarget.classList.remove(styles.dragOver)
 
     const playerId = e.dataTransfer.getData('playerId')
@@ -92,6 +102,7 @@ export function TeamBuilder({
 
   const handleDropToAvailable = async (e) => {
     e.preventDefault()
+    e.stopPropagation()
     e.currentTarget.classList.remove(styles.dragOver)
 
     const teamPlayerId = e.dataTransfer.getData('teamPlayerId')
@@ -226,7 +237,12 @@ export function TeamBuilder({
                 </div>
               </div>
 
-              <div className={styles.teamPlayers}>
+              <div 
+                className={styles.teamPlayers}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, team.id)}
+              >
                 {(!team.team_players || team.team_players.length === 0) ? (
                   <p className={styles.dropHint}>Arraste jogadores aqui</p>
                 ) : (
