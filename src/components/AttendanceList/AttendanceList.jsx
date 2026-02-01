@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { formatPhone } from '../../utils/phone'
 import styles from './AttendanceList.module.css'
 
 export function AttendanceList({
@@ -44,7 +45,14 @@ export function AttendanceList({
   )
 
   const filteredPlayers = availablePlayers.filter(
-    player => player.name.toLowerCase().includes(searchTerm.toLowerCase())
+    player => {
+      if (!searchTerm) return true
+      const searchLower = searchTerm.toLowerCase()
+      const nameMatch = player.name?.toLowerCase().includes(searchLower)
+      const positionMatch = player.primary_position?.toLowerCase().includes(searchLower)
+      const phoneMatch = player.phone?.replace(/\D/g, '').includes(searchTerm.replace(/\D/g, ''))
+      return nameMatch || positionMatch || phoneMatch
+    }
   )
 
   const handleAddPlayer = async () => {
@@ -183,7 +191,17 @@ export function AttendanceList({
                   className={styles.suggestion}
                   onClick={() => handleSelectPlayer(player.id)}
                 >
-                  <span>{player.name}</span>
+                  <div className={styles.suggestionLeft}>
+                    <div className={styles.suggestionMain}>
+                      <span className={styles.suggestionName}>{player.name}</span>
+                      {player.primary_position && (
+                        <span className={styles.suggestionPosition}>{player.primary_position}</span>
+                      )}
+                    </div>
+                    {player.phone && (
+                      <div className={styles.suggestionPhone}>{formatPhone(player.phone)}</div>
+                    )}
+                  </div>
                   <span className={`badge badge-${player.type}`}>
                     {player.type === 'mensalista' ? 'M' : 'A'}
                   </span>
