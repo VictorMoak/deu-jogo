@@ -205,13 +205,15 @@
   flex-shrink: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-xs);
+  flex-direction: row;
 }
 
 .matchNumberFull {
   font-weight: 700;
   color: var(--gold);
-  font-size: 0.875rem;
+  font-size: 1rem;
   white-space: nowrap;
 }
 
@@ -223,7 +225,7 @@
 }
 
 .teamNameCompact {
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: var(--white);
   white-space: nowrap;
   overflow: hidden;
@@ -233,7 +235,7 @@
 
 .scoreCompact {
   font-weight: 900;
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: var(--gold);
   padding: 0 var(--spacing-xs);
   white-space: nowrap;
@@ -262,18 +264,22 @@
 .matchTitleRight {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-sm);
+  flex-wrap: wrap;
 }
 
 .timer {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: 1.125rem;
+  font-weight: 700;
   color: var(--gold);
-  background: rgba(212, 175, 55, 0.1);
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--radius-sm);
+  background: rgba(212, 175, 55, 0.15);
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-md);
   white-space: nowrap;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .timerMs {
@@ -282,8 +288,15 @@
 }
 
 .timerFinished {
-  background: rgba(34, 197, 94, 0.1);
+  background: rgba(34, 197, 94, 0.15);
   color: var(--success);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.matchStatus {
+  font-size: 0.6rem;
+  padding: 0.2rem 0.4rem;
+  text-align: center;
 }
 
 .editBtn {
@@ -367,6 +380,14 @@
 .matchNumber {
   font-weight: 700;
   color: var(--gold);
+}
+
+.matchNumber .matchNumberFull {
+  display: inline;
+}
+
+.matchNumber .matchNumberShort {
+  display: none;
 }
 
 .matchActions {
@@ -665,6 +686,14 @@
   .matchNumberShort {
     display: inline;
   }
+  
+  .matchNumber .matchNumberFull {
+    display: none;
+  }
+  
+  .matchNumber .matchNumberShort {
+    display: inline;
+  }
 
   .teamNameCompact {
     max-width: 60px;
@@ -672,7 +701,7 @@
   }
 
   .scoreCompact {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
 
   .collapsedCenter {
@@ -680,8 +709,19 @@
   }
 
   .timer {
-    font-size: 0.7rem;
-    padding: 0.15rem 0.35rem;
+    font-size: 0.85rem !important;
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .matchStatus {
+    font-size: 0.65rem !important;
+    padding: 0.15rem 0.3rem;
+  }
+  
+  .collapsedRight {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
   }
 }
 

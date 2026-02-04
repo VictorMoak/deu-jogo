@@ -99,6 +99,23 @@ export function MatchCard({
     return labels[status] || status
   }
 
+  // Get captain for a team
+  const getCaptain = (team) => {
+    if (!team?.team_players) return null
+    const captain = team.team_players.find(tp => tp.is_captain)
+    return captain?.player?.name || null
+  }
+
+  // Format team name with captain for selects
+  const formatTeamNameForSelect = (team) => {
+    const teamName = team?.name || 'Time'
+    const captain = getCaptain(team)
+    if (captain) {
+      return `${teamName} - ${captain} ©`
+    }
+    return teamName
+  }
+
   const toggleCollapse = (matchId) => {
     setCollapsedMatches(prev => {
       const newSet = new Set(prev)
@@ -200,7 +217,7 @@ export function MatchCard({
               <option value="">Selecione</option>
               {teams?.map(team => (
                 <option key={team.id} value={team.id} disabled={team.id === selectedTeamB}>
-                  {team.name}
+                  {formatTeamNameForSelect(team)}
                 </option>
               ))}
             </select>
@@ -218,7 +235,7 @@ export function MatchCard({
               <option value="">Selecione</option>
               {teams?.map(team => (
                 <option key={team.id} value={team.id} disabled={team.id === selectedTeamA}>
-                  {team.name}
+                  {formatTeamNameForSelect(team)}
                 </option>
               ))}
             </select>
@@ -290,14 +307,14 @@ export function MatchCard({
                     <span className={styles.teamNameCompact}>{match.team_b?.name}</span>
                   </div>
                   <div className={styles.collapsedRight}>
+                    <span className={`${styles.matchStatus} badge badge-${match.status.replace('_', '-')}`}>
+                      {getStatusLabel(match.status)}
+                    </span>
                     <MatchTimer
                       startedAt={match.started_at}
                       finishedAt={match.finished_at}
                       status={match.status}
                     />
-                    <span className={`badge badge-${match.status.replace('_', '-')}`}>
-                      {getStatusLabel(match.status)}
-                    </span>
                   </div>
                 </div>
               ) : (
@@ -311,9 +328,15 @@ export function MatchCard({
                       >
                         −
                       </button>
-                      <span className={styles.matchNumber}>Partida {match.match_number}</span>
+                      <span className={styles.matchNumber}>
+                        <span className={styles.matchNumberFull}>Partida {match.match_number}</span>
+                        <span className={styles.matchNumberShort}>#{match.match_number}</span>
+                      </span>
                     </div>
                     <div className={styles.matchTitleRight}>
+                      <span className={`${styles.matchStatus} badge badge-${match.status.replace('_', '-')}`}>
+                        {getStatusLabel(match.status)}
+                      </span>
                       <MatchTimer
                         startedAt={match.started_at}
                         finishedAt={match.finished_at}
@@ -335,9 +358,6 @@ export function MatchCard({
                       >
                         🗑️
                       </button>
-                      <span className={`badge badge-${match.status.replace('_', '-')}`}>
-                        {getStatusLabel(match.status)}
-                      </span>
                     </div>
                   </div>
                 </div>

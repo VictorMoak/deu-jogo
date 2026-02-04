@@ -7,6 +7,13 @@ export function Scoreboard({ match, onUpdateScore, isEditable = true }) {
     onUpdateScore(match.id, newScoreA, newScoreB)
   }
 
+  // Get captain for a team
+  const getCaptain = (team) => {
+    if (!team?.team_players) return null
+    const captain = team.team_players.find(tp => tp.is_captain)
+    return captain?.player?.name || null
+  }
+
   // Allow editing if:
   // - Match is in progress (normal editing)
   // - OR match is finished AND in edit mode (isEditable from parent)
@@ -17,15 +24,30 @@ export function Scoreboard({ match, onUpdateScore, isEditable = true }) {
     <div className={styles.scoreboard}>
       {/* Team names row (visible on small screens) */}
       <div className={styles.teamNamesRow}>
-        <span className={styles.teamNameTop}>{match.team_a?.name || 'Time A'}</span>
+        <div className={styles.teamNameTopContainer}>
+          <span className={styles.teamNameTop}>{match.team_a?.name || 'Time A'}</span>
+          {getCaptain(match.team_a) && (
+            <span className={styles.teamCaptainTop}>© {getCaptain(match.team_a)}</span>
+          )}
+        </div>
         <span className={styles.xSmall}>×</span>
-        <span className={styles.teamNameTop}>{match.team_b?.name || 'Time B'}</span>
+        <div className={styles.teamNameTopContainer}>
+          <span className={styles.teamNameTop}>{match.team_b?.name || 'Time B'}</span>
+          {getCaptain(match.team_b) && (
+            <span className={styles.teamCaptainTop}>© {getCaptain(match.team_b)}</span>
+          )}
+        </div>
       </div>
 
       {/* Scores row */}
       <div className={styles.scoresRow}>
         <div className={styles.team}>
-          <span className={styles.teamName}>{match.team_a?.name || 'Time A'}</span>
+          <div className={styles.teamNameContainer}>
+            <span className={styles.teamName}>{match.team_a?.name || 'Time A'}</span>
+            {getCaptain(match.team_a) && (
+              <span className={styles.teamCaptain}>© {getCaptain(match.team_a)}</span>
+            )}
+          </div>
           <div className={styles.scoreControl}>
             {canEdit && (
               <button
@@ -55,7 +77,12 @@ export function Scoreboard({ match, onUpdateScore, isEditable = true }) {
         </div>
 
         <div className={styles.team}>
-          <span className={styles.teamName}>{match.team_b?.name || 'Time B'}</span>
+          <div className={styles.teamNameContainer}>
+            <span className={styles.teamName}>{match.team_b?.name || 'Time B'}</span>
+            {getCaptain(match.team_b) && (
+              <span className={styles.teamCaptain}>© {getCaptain(match.team_b)}</span>
+            )}
+          </div>
           <div className={styles.scoreControl}>
             {canEdit && (
               <button

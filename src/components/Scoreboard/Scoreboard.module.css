@@ -15,15 +15,30 @@
   gap: var(--spacing-sm);
 }
 
+.teamNameTopContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
 .teamNameTop {
   font-weight: 700;
   font-size: 0.875rem;
   color: var(--white);
   text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 120px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.teamCaptainTop {
+  font-size: 0.9rem;
+  color: var(--gray-light);
+  text-align: center;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .xSmall {
@@ -51,15 +66,32 @@
 }
 
 /* Hide team name inside team on small screens */
+.teamNameContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
 .teamName {
   display: none;
   font-weight: 700;
-  font-size: 0.875rem;
+  font-size: 1.8rem !important;
   color: var(--white);
   text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.teamCaptain {
+  display: none;
+  font-size: 1rem !important;
+  color: var(--gray-light);
+  text-align: center;
+  white-space: normal;
+  word-wrap: break-word;
   max-width: 100%;
 }
 
@@ -145,13 +177,13 @@
 }
 
 .x {
-  font-size: 1.5rem;
+  font-size: 2.5rem !important;
   font-weight: 700;
   color: var(--gold);
 }
 
 /* Larger screens - show original layout */
-@media (min-width: 500px) {
+@media (min-width: 601px) {
   .scoreboard {
     flex-direction: row;
     gap: var(--spacing-lg);
@@ -170,6 +202,11 @@
 
   /* Show team names inside team */
   .teamName {
+    display: block;
+    font-size: 1rem;
+  }
+
+  .teamCaptain {
     display: block;
     font-size: 1rem;
   }
@@ -200,15 +237,20 @@
 }
 
 /* Very small screens */
-@media (max-width: 360px) {
+@media (max-width: 600px) {
   .scoreboard {
     padding: var(--spacing-sm);
     gap: var(--spacing-xs);
   }
 
   .teamNameTop {
-    font-size: 0.75rem;
-    max-width: 90px;
+    display: block;
+    font-size: 1.75rem;
+  }
+
+  .teamCaptainTop {
+    display: block;
+    font-size: 0.95rem;
   }
 
   .scoresRow {
@@ -228,6 +270,6 @@
   }
 
   .xSmall {
-    font-size: 0.875rem;
+    font-size: 2.5rem;
   }
 }
