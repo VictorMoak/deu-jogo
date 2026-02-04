@@ -75,6 +75,23 @@
   margin: 0 var(--spacing-xs);
 }
 
+
+.headerRight {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.headerStatusCenter {
+  display: inline-flex;
+}
+
+.headerStatusRight {
+  display: none;
+}
+
+
 .headerSpacer {
   width: 80px;
 }
@@ -208,6 +225,7 @@
   .header {
     padding: var(--spacing-sm);
   }
+  
   
   .headerTitle {
     font-size: 1.125rem;

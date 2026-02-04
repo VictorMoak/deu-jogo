@@ -8,6 +8,7 @@ import { TeamBuilder } from '../../components/TeamBuilder'
 import { MatchCard } from '../../components/MatchCard'
 import { StandingsTable } from '../../components/StandingsTable'
 import { MenuButton } from '../../components/Sidebar'
+import { BackButton } from '../../components/BackButton'
 import styles from './GameDay.module.css'
 
 const TABS = [
@@ -145,9 +146,7 @@ export function GameDay({ gameDay, onBack, onUpdateGameDay, onToggleSidebar }) {
       <header className={styles.header}>
         <div className={styles.headerLeft}>
           <MenuButton onClick={onToggleSidebar} />
-          <button onClick={onBack} className="btn btn-secondary">
-            ← Voltar
-          </button>
+          <BackButton onClick={onBack} />
         </div>
         <div className={styles.headerInfo}>
           <h1 className={styles.headerTitle}>

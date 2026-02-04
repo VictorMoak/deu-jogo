@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { usePlayers } from '../../hooks/usePlayers'
 import { MenuButton } from '../../components/Sidebar'
+import { BackButton } from '../../components/BackButton'
 import { formatPhone, removePhoneMask } from '../../utils/phone'
 import styles from './PlayersManagement.module.css'
 
@@ -195,9 +196,7 @@ export function PlayersManagement({ onBack, onToggleSidebar }) {
       <header className={styles.header}>
         <div className={styles.headerLeft}>
           <MenuButton onClick={onToggleSidebar} />
-          <button onClick={onBack} className="btn btn-secondary">
-            ← Voltar
-          </button>
+          <BackButton onClick={onBack} />
         </div>
         <h1>Gerenciar Jogadores</h1>
         <div className={styles.headerSpacer}></div>
