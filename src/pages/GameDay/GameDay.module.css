@@ -17,6 +17,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  flex-shrink: 0;
 }
 
 .headerInfo {
@@ -25,6 +26,8 @@
   align-items: center;
   gap: var(--spacing-xs);
   flex: 1;
+  min-width: 0;
+  text-align: center;
 }
 
 .headerTitle {
@@ -94,11 +97,23 @@
 
 .headerSpacer {
   width: 80px;
+  flex-shrink: 0;
 }
 
 .finishBtn {
   white-space: nowrap;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.whistleIcon {
+  flex-shrink: 0;
+}
+
+.finishBtnText {
+  display: inline-block;
 }
 
 /* Modal */
@@ -224,25 +239,60 @@
 @media (max-width: 600px) {
   .header {
     padding: var(--spacing-sm);
+    position: relative;
   }
   
+  .headerLeft {
+    position: absolute;
+    left: var(--spacing-sm);
+    z-index: 1;
+  }
+  
+  .headerInfo {
+    width: 100%;
+    padding: 0 80px;
+    box-sizing: border-box;
+  }
   
   .headerTitle {
     font-size: 1.125rem;
+    width: 100%;
+  }
+  
+  .finishBtn {
+    position: absolute;
+    right: var(--spacing-sm);
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+  
+  .finishBtnText {
+    display: none;
+  }
+  
+  .whistleIcon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .headerSpacer {
+    position: absolute;
+    right: var(--spacing-sm);
+    z-index: 1;
   }
 
   .headerDetails {
     font-size: 0.75rem;
     gap: var(--spacing-xs);
     flex-wrap: wrap;
-  }
-
-  .headerDateFull {
-    display: none;
-  }
-
-  .headerDateShort {
-    display: inline;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    line-height: 1;
   }
 
   .headerStatus {
@@ -252,8 +302,13 @@
     margin-top: var(--spacing-xs);
   }
 
-  .headerSeparatorStatus {
+  .headerDateFull {
     display: none;
+  }
+
+  .headerDateShort {
+    text-transform: capitalize;
+    display: flex;
   }
 
   .headerDateTime {

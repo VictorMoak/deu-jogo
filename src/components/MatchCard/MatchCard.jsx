@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Scoreboard } from '../Scoreboard'
+import { WhistleIcon } from '../WhistleIcon'
 import styles from './MatchCard.module.css'
 
 // Timer component for match duration
@@ -38,7 +39,7 @@ function MatchTimer({ startedAt, finishedAt, status }) {
 
   return (
     <span className={`${styles.timer} ${isFinished ? styles.timerFinished : ''}`}>
-      {isFinished ? '🏁 ' : '⏱ '}
+      {isFinished ? <WhistleIcon size={16} style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '4px' }} /> : '⏱ '}
       {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
       {!isFinished && <span className={styles.timerMs}>.{String(milliseconds).padStart(2, '0')}</span>}
     </span>
@@ -365,7 +366,7 @@ export function MatchCard({
                         className="btn btn-secondary btn-sm"
                         onClick={() => setConfirmFinishMatch(match)}
                       >
-                        🏁 Finalizar
+                        <WhistleIcon size={16} style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '4px' }} /> Finalizar
                       </button>
                     )}
                     <button
@@ -413,7 +414,7 @@ export function MatchCard({
                 className="btn btn-primary"
                 onClick={handleFinishMatch}
               >
-                🏁 Confirmar
+                <WhistleIcon size={18} color="currentColor" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '4px' }} /> Confirmar
               </button>
             </div>
           </div>

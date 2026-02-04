@@ -9,6 +9,7 @@ import { MatchCard } from '../../components/MatchCard'
 import { StandingsTable } from '../../components/StandingsTable'
 import { MenuButton } from '../../components/Sidebar'
 import { BackButton } from '../../components/BackButton'
+import { WhistleIcon } from '../../components/WhistleIcon'
 import styles from './GameDay.module.css'
 
 const TABS = [
@@ -163,7 +164,6 @@ export function GameDay({ gameDay, onBack, onUpdateGameDay, onToggleSidebar }) {
                 </>
               )}
             </div>
-            <span className={styles.headerSeparatorStatus}>•</span>
             <span className={`${styles.headerStatus} badge badge-${localGameDay?.status?.replace('_', '-')}`}>
               {getStatusLabel(localGameDay?.status)}
             </span>
@@ -175,7 +175,8 @@ export function GameDay({ gameDay, onBack, onUpdateGameDay, onToggleSidebar }) {
             className={`${styles.finishBtn} btn btn-secondary`}
             title="Encerrar Game Day"
           >
-            🏁 Encerrar
+            <WhistleIcon size={24} className={styles.whistleIcon} />
+            <span className={styles.finishBtnText}>Encerrar</span>
           </button>
         )}
         {localGameDay?.status === 'finished' && (
@@ -220,7 +221,7 @@ export function GameDay({ gameDay, onBack, onUpdateGameDay, onToggleSidebar }) {
                 className="btn btn-primary"
                 onClick={handleFinishGameDay}
               >
-                🏁 Confirmar
+                <WhistleIcon size={18} color="currentColor" /> Confirmar
               </button>
             </div>
           </div>
