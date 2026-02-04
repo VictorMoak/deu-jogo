@@ -19,7 +19,7 @@ export function Home({ onSelectGameDay, onToggleSidebar }) {
     setIsCreating(true)
     const now = new Date()
     const today = now.toISOString().split('T')[0]
-    // Formatar horário atual no formato HH:MM para o input type="time"
+    // Format current time in HH:MM format for input type="time"
     const hours = String(now.getHours()).padStart(2, '0')
     const minutes = String(now.getMinutes()).padStart(2, '0')
     const currentTime = `${hours}:${minutes}`
@@ -33,7 +33,7 @@ export function Home({ onSelectGameDay, onToggleSidebar }) {
   const handleSaveEdit = async () => {
     if (isCreating) {
       // Creating new game day
-      // Se título estiver vazio, usar data + horário como padrão
+      // If title is empty, use date + time as default
       const finalTitle = editTitle.trim() || getDefaultTitle(editDate, editTime)
       const newGameDay = await createGameDay({
         date: editDate,
@@ -51,7 +51,7 @@ export function Home({ onSelectGameDay, onToggleSidebar }) {
       }
     } else if (editingGameDay) {
       // Updating existing game day
-      // Se título estiver vazio, usar data + horário como padrão
+      // If title is empty, use date + time as default
       const finalTitle = editTitle.trim() || getDefaultTitle(editDate, editTime)
       await updateGameDay(editingGameDay.id, {
         title: finalTitle,

@@ -32,11 +32,11 @@ export function GameDay({ gameDay, onBack, onUpdateGameDay, onToggleSidebar }) {
     setLocalGameDay(gameDay)
   }, [gameDay])
 
-  // Wrapper para updateMatchStatus que também atualiza o gameDay quando uma partida é iniciada
+  // Wrapper for updateMatchStatus that also updates gameDay when a match is started
   const handleUpdateMatchStatus = async (matchId, status) => {
     await matches.updateMatchStatus(matchId, status)
 
-    // Se a partida foi iniciada e o gameDay ainda não está em andamento, atualizar
+    // If match was started and gameDay is not yet in progress, update it
     if (status === 'in_progress' && localGameDay?.status !== 'in_progress') {
       const updatedGameDay = await updateGameDayStatus(localGameDay.id, 'in_progress')
       if (updatedGameDay) {
@@ -58,7 +58,7 @@ export function GameDay({ gameDay, onBack, onUpdateGameDay, onToggleSidebar }) {
         }
       }
       setConfirmFinish(false)
-      // Voltar para a home após encerrar
+      // Go back to home after finishing
       if (onBack) {
         onBack()
       }
@@ -125,7 +125,7 @@ export function GameDay({ gameDay, onBack, onUpdateGameDay, onToggleSidebar }) {
             {...matches}
             teams={teams.teams}
             gameDayId={gameDay?.id}
-            updateMatchStatus={handleUpdateMatchStatus} // Sobrescreve a função do hook
+            updateMatchStatus={handleUpdateMatchStatus} // Override hook function
           />
         )
       case 'standings':

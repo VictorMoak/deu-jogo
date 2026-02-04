@@ -266,14 +266,14 @@
   border: 1px solid;
 }
 
-/* Posição principal: dourado */
+/* Primary position: gold */
 .positionPrimary {
   background: rgba(212, 175, 55, 0.2);
   color: var(--gold);
   border-color: rgba(212, 175, 55, 0.4);
 }
 
-/* Posição secundária: cinza */
+/* Secondary position: gray */
 .positionSecondary {
   background: rgba(108, 117, 125, 0.2);
   color: var(--gray-light);

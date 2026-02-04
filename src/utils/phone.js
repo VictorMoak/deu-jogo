@@ -1,23 +1,23 @@
-// Função para aplicar máscara de telefone brasileiro
+// Function to apply Brazilian phone mask
 export const formatPhone = (value) => {
   if (!value) return ''
-  // Remove tudo que não é dígito
+  // Remove everything that is not a digit
   const numbers = value.replace(/\D/g, '')
-  // Aplica a máscara conforme o tamanho
+  // Apply mask according to length
   if (numbers.length <= 10) {
-    // Telefone fixo: (XX) XXXX-XXXX
+    // Landline: (XX) XXXX-XXXX
     return numbers
       .replace(/(\d{2})(\d)/, '($1) $2')
       .replace(/(\d{4})(\d)/, '$1-$2')
   } else {
-    // Celular: (XX) XXXXX-XXXX
+    // Mobile: (XX) XXXXX-XXXX
     return numbers
       .replace(/(\d{2})(\d)/, '($1) $2')
       .replace(/(\d{5})(\d)/, '$1-$2')
   }
 }
 
-// Função para remover máscara (salvar apenas números)
+// Function to remove mask (save only numbers)
 export const removePhoneMask = (value) => {
   return value.replace(/\D/g, '')
 }

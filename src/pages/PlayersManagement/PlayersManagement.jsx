@@ -33,7 +33,7 @@ export function PlayersManagement({ onBack, onToggleSidebar }) {
     setEditPlayerType(player.type)
     setEditPlayerPrimaryPosition(player.primary_position || '')
     setEditPlayerSecondaryPosition(player.secondary_position || '')
-    // Aplica máscara ao carregar telefone existente
+    // Apply mask when loading existing phone
     setEditPlayerPhone(player.phone ? formatPhone(player.phone) : '')
   }
 
@@ -49,7 +49,7 @@ export function PlayersManagement({ onBack, onToggleSidebar }) {
   const handleSaveEdit = async () => {
     if (!editPlayerName.trim()) return
 
-    // Remove máscara do telefone antes de salvar
+    // Remove phone mask before saving
     const phoneWithoutMask = removePhoneMask(editPlayerPhone)
 
     // Check if it's a new player (editingPlayer has no id) or editing existing

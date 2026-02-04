@@ -18,6 +18,9 @@ export function TeamBuilder({
   const [editingNumber, setEditingNumber] = useState(null)
   const [playerNumber, setPlayerNumber] = useState('')
   const [draggedPlayer, setDraggedPlayer] = useState(null)
+  const [multiSelectMode, setMultiSelectMode] = useState(false)
+  const [selectedPlayers, setSelectedPlayers] = useState(new Set())
+  const [showTeamSelector, setShowTeamSelector] = useState(false)
 
   // Sort team players: captain first, then by name
   const sortTeamPlayers = (players) => {
@@ -34,9 +37,30 @@ export function TeamBuilder({
     t.team_players?.map(tp => tp.player_id) || []
   ) || []
 
+  // Create map of original arrival order based on attendance
+  const arrivalOrderMap = new Map()
+  attendance?.forEach((item, index) => {
+    const playerId = item.player_id || item.id
+    if (playerId && !arrivalOrderMap.has(playerId)) {
+      arrivalOrderMap.set(playerId, index + 1)
+    }
+  })
+
   const availablePlayers = attendance?.filter(
     a => !assignedPlayerIds.includes(a.player_id)
   ) || []
+
+  // Sort by original arrival order and add order number
+  const sortedAvailablePlayers = [...availablePlayers]
+    .sort((a, b) => {
+      const orderA = arrivalOrderMap.get(a.player_id || a.id) || 0
+      const orderB = arrivalOrderMap.get(b.player_id || b.id) || 0
+      return orderA - orderB
+    })
+    .map((item) => ({
+      ...item,
+      arrivalOrder: arrivalOrderMap.get(item.player_id || item.id) || 0
+    }))
 
   const handleCreateDefaultTeams = async () => {
     for (let i = 0; i < DEFAULT_TEAMS.length; i++) {
@@ -57,9 +81,9 @@ export function TeamBuilder({
     setTeamName('')
   }
 
-  // Drag and Drop handlers - SIMPLES como PlayersManagement
+  // Drag and Drop handlers - Simple like PlayersManagement
   const handleDragStart = (e, player, fromTeamId = null) => {
-    // Armazenar objeto com todas as informações necessárias
+    // Store object with all necessary information
     const dragData = {
       player: player,
       playerId: player.player_id || player.id,
@@ -97,18 +121,18 @@ export function TeamBuilder({
 
     if (!playerId) return
 
-    // Se for o mesmo time, não fazer nada
+    // If it's the same team, do nothing
     if (fromTeamId === teamId) {
       setDraggedPlayer(null)
       return
     }
 
-    // Remover do time anterior se existir
+    // Remove from previous team if exists
     if (fromTeamId && teamPlayerId) {
       await removePlayerFromTeam(teamPlayerId)
     }
 
-    // Adicionar ao novo time
+    // Add to new team
     await addPlayerToTeam(teamId, playerId)
 
     setDraggedPlayer(null)
@@ -143,6 +167,47 @@ export function TeamBuilder({
     setPlayerNumber('')
   }
 
+  // Multi-select handlers
+  const toggleMultiSelectMode = () => {
+    setMultiSelectMode(!multiSelectMode)
+    setSelectedPlayers(new Set())
+    setShowTeamSelector(false)
+  }
+
+  const togglePlayerSelection = (playerId) => {
+    const newSelected = new Set(selectedPlayers)
+    if (newSelected.has(playerId)) {
+      newSelected.delete(playerId)
+    } else {
+      newSelected.add(playerId)
+    }
+    setSelectedPlayers(newSelected)
+  }
+
+  const handleSendSelectedPlayers = () => {
+    if (selectedPlayers.size > 0) {
+      setShowTeamSelector(true)
+    }
+  }
+
+  const handleSendToTeam = async (teamId) => {
+    for (const playerId of selectedPlayers) {
+      await addPlayerToTeam(teamId, playerId)
+    }
+    setSelectedPlayers(new Set())
+    setShowTeamSelector(false)
+    setMultiSelectMode(false)
+  }
+
+  const selectAllPlayers = () => {
+    const allIds = new Set(sortedAvailablePlayers.map(p => p.player_id || p.id))
+    setSelectedPlayers(allIds)
+  }
+
+  const deselectAllPlayers = () => {
+    setSelectedPlayers(new Set())
+  }
+
 
   return (
     <div className={styles.container}>
@@ -174,40 +239,106 @@ export function TeamBuilder({
           onDragLeave={handleDragLeave}
           onDrop={handleDropToAvailable}
         >
-          <h3>Jogadores Disponíveis ({availablePlayers.length})</h3>
+          <div className={styles.availablePlayersHeader}>
+            <h3>Jogadores Disponíveis ({availablePlayers.length})</h3>
+            <div className={styles.availablePlayersActions}>
+              {multiSelectMode && (
+                <>
+                  <button
+                    className={`${styles.multiSelectBtn} ${selectedPlayers.size === sortedAvailablePlayers.length ? styles.active : ''}`}
+                    onClick={selectedPlayers.size === sortedAvailablePlayers.length ? deselectAllPlayers : selectAllPlayers}
+                    title={selectedPlayers.size === sortedAvailablePlayers.length ? 'Desselecionar todos' : 'Selecionar todos'}
+                  >
+                    {selectedPlayers.size === sortedAvailablePlayers.length ? '☑' : '☐'}
+                  </button>
+                  {selectedPlayers.size > 0 && (
+                    <button
+                      className={styles.sendBtn}
+                      onClick={handleSendSelectedPlayers}
+                      title={`Adicionar ${selectedPlayers.size} jogador(es) selecionado(s)`}
+                    >
+                      → {selectedPlayers.size}
+                    </button>
+                  )}
+                </>
+              )}
+              <button
+                className={`${styles.multiSelectToggle} ${multiSelectMode ? styles.active : ''}`}
+                onClick={toggleMultiSelectMode}
+                title={multiSelectMode ? 'Sair do modo seleção' : 'Modo seleção múltipla'}
+              >
+                {multiSelectMode ? '✕' : '☑'}
+              </button>
+            </div>
+          </div>
           <div className={styles.playerList}>
             {availablePlayers.length === 0 ? (
               <p className="text-gray text-sm">Todos os jogadores foram distribuídos.</p>
             ) : (
-              availablePlayers.map(item => (
-                <div
-                  key={item.id}
-                  className={styles.playerChip}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, item)}
-                >
-                  <span>{item.player?.name}</span>
-                  <span className={`badge badge-${item.player?.type}`}>
-                    {item.player?.type === 'mensalista' ? 'M' : 'A'}
-                  </span>
-                  {(item.player?.primary_position || item.player?.secondary_position) && (
-                    <div className={styles.playerPositionRow}>
-                      {item.player?.primary_position && (
-                        <span className={`${styles.positionBadgeAvailable} ${styles.positionPrimary}`}>
-                          {item.player.primary_position}
-                        </span>
-                      )}
-                      {item.player?.secondary_position && (
-                        <span className={`${styles.positionBadgeAvailable} ${styles.positionSecondary}`}>
-                          {item.player.secondary_position}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))
+              sortedAvailablePlayers.map(item => {
+                const playerId = item.player_id || item.id
+                const isSelected = selectedPlayers.has(playerId)
+                return (
+                  <div
+                    key={item.id}
+                    className={`${styles.playerChip} ${multiSelectMode ? styles.selectable : ''} ${isSelected ? styles.selected : ''}`}
+                    draggable={!multiSelectMode}
+                    onDragStart={(e) => !multiSelectMode && handleDragStart(e, item)}
+                    onClick={() => multiSelectMode && togglePlayerSelection(playerId)}
+                  >
+                    {multiSelectMode && (
+                      <span className={styles.selectCheckbox}>
+                        {isSelected ? '✓' : ''}
+                      </span>
+                    )}
+                    <span className={styles.arrivalOrder}>{item.arrivalOrder}</span>
+                    <span>{item.player?.name}</span>
+                    <span className={`badge badge-${item.player?.type}`}>
+                      {item.player?.type === 'mensalista' ? 'M' : 'A'}
+                    </span>
+                    {(item.player?.primary_position || item.player?.secondary_position) && (
+                      <div className={styles.playerPositionRow}>
+                        {item.player?.primary_position && (
+                          <span className={`${styles.positionBadgeAvailable} ${styles.positionPrimary}`}>
+                            {item.player.primary_position}
+                          </span>
+                        )}
+                        {item.player?.secondary_position && (
+                          <span className={`${styles.positionBadgeAvailable} ${styles.positionSecondary}`}>
+                            {item.player.secondary_position}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )
+              })
             )}
           </div>
+          {showTeamSelector && selectedPlayers.size > 0 && (
+            <div className={styles.teamSelector}>
+              <div className={styles.teamSelectorHeader}>
+                <span>Adicionar {selectedPlayers.size} jogador(es) ao time:</span>
+                <button
+                  className={styles.closeSelectorBtn}
+                  onClick={() => setShowTeamSelector(false)}
+                >
+                  ✕
+                </button>
+              </div>
+              <div className={styles.teamSelectorList}>
+                {teams?.map(team => (
+                  <button
+                    key={team.id}
+                    className={styles.teamSelectorItem}
+                    onClick={() => handleSendToTeam(team.id)}
+                  >
+                    {team.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Teams Grid */}
