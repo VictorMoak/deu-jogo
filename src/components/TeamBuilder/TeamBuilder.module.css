@@ -40,7 +40,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-sm);
-  min-height: 50px;
 }
 
 .playerChip {
@@ -75,8 +74,9 @@
   min-height: 200px;
   transition: all var(--transition-fast);
   position: relative;
-  /* Garantir que toda a área do card seja clicável/detectável */
   overflow: visible;
+  min-width: 0;
+
 }
 
 .teamCard.dragOver,
@@ -169,9 +169,9 @@
   position: relative;
   z-index: 2;
   pointer-events: auto;
+  overflow: hidden;
+  min-width: 0;
 }
-
-/* Quando está arrastando, desabilitar pointer-events nos elementos filhos para permitir drop */
 
 .teamPlayer:hover {
   background: rgba(255, 255, 255, 0.06);
@@ -252,9 +252,18 @@
   align-items: center;
   gap: var(--spacing-xs);
   margin-top: 2px;
+  flex-wrap: wrap;
 }
 
-.positionBadge {
+.positionBadgeAvailable {
+  font-size: 0.625rem;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.positionBadgeTeam {
   font-size: 0.625rem;
   padding: 2px 6px;
   border-radius: var(--radius-sm);
@@ -293,6 +302,7 @@
   opacity: 0;
   transition: opacity var(--transition-fast);
   pointer-events: auto;
+  flex-shrink: 0;
 }
 
 .teamPlayer:hover .playerActions {
@@ -301,8 +311,12 @@
 
 .captainBtn,
 .removeBtn {
-  width: 24px;
-  height: 24px;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -311,12 +325,14 @@
   border-radius: var(--radius-sm);
   color: var(--gray);
   cursor: pointer;
-  font-size: 0.75rem;
+  font-size-adjust: 1rem;
   transition: all var(--transition-fast);
   flex-shrink: 0;
   pointer-events: auto;
   position: relative;
   z-index: 10;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .captainBtn:hover:not(:disabled) {
@@ -350,20 +366,71 @@
     flex-direction: column;
   }
   
+  .availablePlayers {
+    padding: var(--spacing-sm) !important;
+  }
+  
+  .playerChip {
+    padding: var(--spacing-xs) var(--spacing-xs) !important;
+  }
+
   .teamsGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--spacing-sm);
+    width: 100%;
+  }
+  
+  .teamCard {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 250px;
+    padding: var(--spacing-sm) !important;
+  }
+  
+  .teamCard :global(.card) {
+    padding: var(--spacing-sm) !important;
+  }
+  
+  .teamName {
+    font-size: 0.9rem;
+  }
+
+  .teamNameInput {
+    font-size: 1rem;
+  }
+
+  .teamActions {
+    gap: var(--spacing-xs);
+  }
+
+  .teamActions :global(.btn-icon) {
+    width: 22px !important;
+    height: 22px !important;
+    font-size: 0.7rem !important;
+    padding: 0 !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+  }
+  
+  .teamActions :global(.btn-sm) {
+    padding: 0 !important;
+  }
+
+  .playerCount {
+    width: 22px;
+    height: 22px;
+    font-size: 0.7rem;
   }
   
   .playerActions {
     opacity: 1;
+    gap: 2px;
+    flex-shrink: 0;
   }
 
   .captainBadge {
     display: none;
-  }
-
-  .teamCard {
-    min-height: 250px;
   }
 
   .teamPlayers {
@@ -372,10 +439,77 @@
 
   .teamPlayer {
     pointer-events: auto;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs);
+    overflow: hidden;
+    min-width: 0;
   }
 
   .teamPlayer button {
     pointer-events: auto;
+  }
+
+  .playerInfo {
+    min-width: 0;
+    font-size: 0.8rem;
+  }
+
+  .playerNameContainer {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .playerNameRow {
+    gap: 4px;
+    font-size: 0.75rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .playerNumber {
+    min-width: 24px;
+    height: 22px;
+    padding: 0 4px;
+    font-size: 0.75rem;
+  }
+
+  .numberInput {
+    width: 36px;
+    height: 22px;
+    padding: 0 4px;
+    font-size: 0.75rem;
+  }
+
+  .captainBtn,
+  .removeBtn {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+    font-size: 0.65rem !important;
+    padding: 0 !important;
+  }
+
+  .positionBadgeAvailable {
+    font-size: 0.5rem !important;
+    padding: 2px 3px !important;
+    flex-shrink: 0;
+    margin: 0 !important;
+  }
+
+  .positionBadgeTeam {
+    font-size: 0.5rem;
+    padding: 1px 3px;
+    flex-shrink: 0;
+  }
+
+  .playerChip :global(.badge),
+  .teamPlayer :global(.badge) {
+    padding: 2px 4px !important;
+    font-size: 0.5rem !important;
   }
 
   .teamCard.dragOver .teamPlayers {

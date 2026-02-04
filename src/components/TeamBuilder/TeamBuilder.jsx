@@ -193,12 +193,12 @@ export function TeamBuilder({
                   {(item.player?.primary_position || item.player?.secondary_position) && (
                     <div className={styles.playerPositionRow}>
                       {item.player?.primary_position && (
-                        <span className={`${styles.positionBadge} ${styles.positionPrimary}`}>
+                        <span className={`${styles.positionBadgeAvailable} ${styles.positionPrimary}`}>
                           {item.player.primary_position}
                         </span>
                       )}
                       {item.player?.secondary_position && (
-                        <span className={`${styles.positionBadge} ${styles.positionSecondary}`}>
+                        <span className={`${styles.positionBadgeAvailable} ${styles.positionSecondary}`}>
                           {item.player.secondary_position}
                         </span>
                       )}
@@ -297,20 +297,25 @@ export function TeamBuilder({
                         <div className={styles.playerNameContainer}>
                           <div className={styles.playerNameRow}>
                             <span>{tp.player?.name}</span>
-                            {tp.is_captain && <span className={styles.captainBadge}>©</span>}
                           </div>
                           {(tp.player?.primary_position || tp.player?.secondary_position) && (
                             <div className={styles.playerPositionRow}>
                               {tp.player?.primary_position && (
-                                <span className={`${styles.positionBadge} ${styles.positionPrimary}`}>
+                                <span className={`${styles.positionBadgeTeam} ${styles.positionPrimary}`}>
                                   {tp.player.primary_position}
                                 </span>
                               )}
                               {tp.player?.secondary_position && (
-                                <span className={`${styles.positionBadge} ${styles.positionSecondary}`}>
+                                <span className={`${styles.positionBadgeTeam} ${styles.positionSecondary}`}>
                                   {tp.player.secondary_position}
                                 </span>
                               )}
+                              {tp.is_captain && <span className={styles.captainBadge}>©</span>}
+                            </div>
+                          )}
+                          {(!tp.player?.primary_position && !tp.player?.secondary_position && tp.is_captain) && (
+                            <div className={styles.playerPositionRow}>
+                              <span className={styles.captainBadge}>©</span>
                             </div>
                           )}
                         </div>
